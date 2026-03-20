@@ -1,0 +1,22 @@
+{% if records %}
+  {% for record in records %}
+  <details>
+    <summary>{{ record.date }}（{{ record.members | length }}人 → {{ record.groups | length }}グループ）</summary>
+    <div class="group-grid">
+      {% for group in record.groups %}
+      <div class="group-card">
+        <h4>グループ {{ loop.index }}</h4>
+        <ul>
+          {% for name in group %}
+          <li>{{ name }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+    </div>
+    <button hx-delete="/history/{{ record.id }}" hx-target="#history" hx-swap="innerHTML" hx-confirm="この履歴を削除しますか？">🗑 この履歴を削除</button>
+  </details>
+  {% endfor %}
+{% else %}
+  <p>まだ組み分け履歴がありません</p>
+{% endif %}

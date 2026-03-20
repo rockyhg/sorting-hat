@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section>
+  <h2>メンバー入力</h2>
+  <form hx-post="/assign" hx-target="#result" hx-swap="innerHTML">
+    <label for="members">メンバー名を1行に1人ずつ入力してください</label>
+    <textarea id="members" name="members" rows="8" placeholder="田中&#10;佐藤&#10;鈴木&#10;高橋&#10;..."></textarea>
+
+    <h2>グループ設定</h2>
+    <fieldset>
+      <legend>指定方法</legend>
+      <label>
+        <input type="radio" name="mode" value="group_size" checked onchange="document.getElementById('group-size-field').style.display='';document.getElementById('num-groups-field').style.display='none';">
+        グループの人数を指定
+      </label>
+      <label>
+        <input type="radio" name="mode" value="num_groups" onchange="document.getElementById('group-size-field').style.display='none';document.getElementById('num-groups-field').style.display='';">
+        グループの数を指定
+      </label>
+    </fieldset>
+
+    <div id="group-size-field">
+      <label for="group_size">1グループあたりの人数</label>
+      <input type="number" id="group_size" name="group_size" min="1" value="2">
+    </div>
+
+    <div id="num-groups-field" style="display:none;">
+      <label for="num_groups">グループ数</label>
+      <input type="number" id="num_groups" name="num_groups" min="1" value="2">
+    </div>
+
+    <button type="submit">🎲 組み分けを実行</button>
+  </form>
+</section>
+
+<section>
+  <div id="result"></div>
+</section>
+
+<hr>
+
+<section>
+  <h2>📜 過去の組み分け履歴</h2>
+  <div id="history" hx-get="/history" hx-trigger="load, historyUpdated from:body" hx-swap="innerHTML"></div>
+</section>
+{% endblock %}

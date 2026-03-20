@@ -1,0 +1,13 @@
+<h2>組み分け結果</h2>
+<div class="group-grid">
+  {% for group in groups %}
+  <div class="group-card">
+    <h3>グループ {{ loop.index }}</h3>
+    <ul>
+      {% for name in group %}
+      <li>{{ name }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endfor %}
+</div>

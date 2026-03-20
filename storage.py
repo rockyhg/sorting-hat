@@ -41,6 +41,12 @@ def save_result(
     return record
 
 
+def clear_history() -> None:
+    _ensure_data_dir()
+    with open(HISTORY_FILE, "w", encoding="utf-8") as f:
+        json.dump({"history": []}, f, ensure_ascii=False, indent=2)
+
+
 def delete_record(record_id: str) -> bool:
     history = load_history()
     new_history = [r for r in history if r["id"] != record_id]

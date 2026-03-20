@@ -1,4 +1,5 @@
 {% if records %}
+  <button hx-delete="/history" hx-target="#history" hx-swap="innerHTML" hx-confirm="すべての履歴を削除しますか？">🗑 すべての履歴を削除</button>
   {% for record in records %}
   <details>
     <summary>{{ record.date }}（{{ record.members | length }}人 → {{ record.groups | length }}グループ）</summary>

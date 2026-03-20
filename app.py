@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from grouping import assign_groups
-from storage import delete_record, load_history, save_result
+from storage import clear_history, delete_record, load_history, save_result
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -50,6 +50,12 @@ async def assign(
 async def history(request: Request):
     records = list(reversed(load_history()))
     return templates.TemplateResponse(request, "_history.html", {"records": records})
+
+
+@app.delete("/history", response_class=HTMLResponse)
+async def clear_all_history(request: Request):
+    clear_history()
+    return templates.TemplateResponse(request, "_history.html", {"records": []})
 
 
 @app.delete("/history/{record_id}", response_class=HTMLResponse)

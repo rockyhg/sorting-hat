@@ -30,7 +30,7 @@
       <input type="number" id="num_groups" name="num_groups" min="1" value="2">
     </div>
 
-    <button type="submit">🎲 組み分けを実行</button>
+    <button type="submit">🎲 組分けを実行</button>
   </form>
 </section>
 
@@ -41,7 +41,7 @@
 <hr>
 
 <section>
-  <h2>📜 過去の組み分け履歴</h2>
+  <h2>📜 過去の組分け履歴</h2>
   <div id="history" hx-get="/history" hx-trigger="load, historyUpdated from:body" hx-swap="innerHTML"></div>
 </section>
 {% endblock %}

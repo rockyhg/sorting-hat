@@ -1,7 +1,7 @@
 [project]
 name = "sorting-hat"
 version = "0.1.0"
-description = "組み分けアプリ - 履歴を考慮したグループ分けツール"
+description = "組分けアプリ - 履歴を考慮したグループ分けツール"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.135.1",

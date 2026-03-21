@@ -1,6 +1,7 @@
 __pycache__/
 .claude/
 .venv/
+.pytest_cache/
 data/history.json
 
 PLAN.md

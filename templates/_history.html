@@ -2,11 +2,11 @@
   <button hx-delete="/history" hx-target="#history" hx-swap="innerHTML" hx-confirm="すべての履歴を削除しますか？">🗑 すべての履歴を削除</button>
   {% for record in records %}
   <details>
-    <summary>{{ record.date }}（{{ record.members | length }}人 → {{ record.groups | length }}グループ）</summary>
+    <summary>{{ record.date }}（{{ record.members | length }}人 → {{ record.groups | length }}部屋）</summary>
     <div class="group-grid">
       {% for group in record.groups %}
       <div class="group-card">
-        <h4>グループ {{ loop.index }}</h4>
+        <h4>ルーム {{ loop.index }}</h4>
         <ul>
           {% for name in group %}
           <li>{{ name }}</li>

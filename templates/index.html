@@ -3,36 +3,67 @@
 {% block content %}
 <section>
   <h2>メンバー入力</h2>
-  <form hx-post="/assign" hx-target="#result" hx-swap="innerHTML">
+  <form id="assign-form">
     <label for="members">メンバー名を1行に1人ずつ入力してください</label>
     <textarea id="members" name="members" rows="8" placeholder="田中&#10;佐藤&#10;鈴木&#10;高橋&#10;..."></textarea>
 
-    <h2>グループ設定</h2>
+    <h2>ルーム設定</h2>
     <fieldset>
       <legend>指定方法</legend>
       <label>
         <input type="radio" name="mode" value="group_size" checked onchange="document.getElementById('group-size-field').style.display='';document.getElementById('num-groups-field').style.display='none';">
-        グループの人数を指定
+        1部屋の人数を指定
       </label>
       <label>
         <input type="radio" name="mode" value="num_groups" onchange="document.getElementById('group-size-field').style.display='none';document.getElementById('num-groups-field').style.display='';">
-        グループの数を指定
+        部屋数を指定
       </label>
     </fieldset>
 
     <div id="group-size-field">
-      <label for="group_size">1グループあたりの人数</label>
+      <label for="group_size">1部屋あたりの人数</label>
       <input type="number" id="group_size" name="group_size" min="1" value="2">
     </div>
 
     <div id="num-groups-field" style="display:none;">
-      <label for="num_groups">グループ数</label>
+      <label for="num_groups">部屋数</label>
       <input type="number" id="num_groups" name="num_groups" min="1" value="2">
     </div>
 
-    <button type="submit">🎲 組分けを実行</button>
+    <button type="button" id="submit-btn">🎲 組分けを実行</button>
   </form>
 </section>
+
+<style>
+  .loading-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 2rem;
+    font-size: 1.1rem;
+    color: #555;
+  }
+  .loading-hat {
+    font-size: 3rem;
+    animation: hat-shake 0.6s ease-in-out infinite alternate;
+    display: block;
+  }
+  @keyframes hat-shake {
+    from { transform: rotate(-10deg) translateY(0); }
+    to   { transform: rotate(10deg) translateY(-6px); }
+  }
+  .loading-dots::after {
+    content: '';
+    animation: dots 1.2s steps(4, end) infinite;
+  }
+  @keyframes dots {
+    0%   { content: ''; }
+    25%  { content: '.'; }
+    50%  { content: '..'; }
+    75%  { content: '...'; }
+  }
+</style>
 
 <script>
   const STORAGE_KEY = 'sortingHatFormState';
@@ -69,6 +100,35 @@
   document.querySelectorAll('input[name="mode"]').forEach(r => r.addEventListener('change', saveFormState));
 
   restoreFormState();
+
+  const MIN_LOADING_MS = 3000;
+
+  document.getElementById('submit-btn').addEventListener('click', async function () {
+    const form = document.getElementById('assign-form');
+    const result = document.getElementById('result');
+    const btn = this;
+
+    btn.disabled = true;
+    result.innerHTML = `
+      <div class="loading-indicator">
+        <span class="loading-hat">🎩</span>
+        <span>組分けを計算中<span class="loading-dots"></span></span>
+      </div>`;
+
+    try {
+      const [html] = await Promise.all([
+        fetch('/assign', { method: 'POST', body: new FormData(form) }).then(r => r.text()),
+        new Promise(resolve => setTimeout(resolve, MIN_LOADING_MS)),
+      ]);
+      result.innerHTML = html;
+      htmx.process(result);
+      document.body.dispatchEvent(new Event('historyUpdated'));
+    } catch (err) {
+      result.innerHTML = '<p style="color:red;">エラーが発生しました。再度お試しください。</p>';
+    } finally {
+      btn.disabled = false;
+    }
+  });
 </script>
 
 <section>

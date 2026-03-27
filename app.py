@@ -63,3 +63,8 @@ async def delete_history(request: Request, record_id: str):
     delete_record(record_id)
     records = list(reversed(load_history()))
     return templates.TemplateResponse(request, "_history.html", {"records": records})
+
+
+@app.get("/ping")
+def ping():
+    return {"status": "ok"}

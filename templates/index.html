@@ -34,6 +34,43 @@
   </form>
 </section>
 
+<script>
+  const STORAGE_KEY = 'sortingHatFormState';
+
+  function saveFormState() {
+    const state = {
+      members: document.getElementById('members').value,
+      mode: document.querySelector('input[name="mode"]:checked')?.value,
+      group_size: document.getElementById('group_size').value,
+      num_groups: document.getElementById('num_groups').value,
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  function restoreFormState() {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const state = JSON.parse(raw);
+    if (state.members) document.getElementById('members').value = state.members;
+    if (state.group_size) document.getElementById('group_size').value = state.group_size;
+    if (state.num_groups) document.getElementById('num_groups').value = state.num_groups;
+    if (state.mode) {
+      const radio = document.querySelector(`input[name="mode"][value="${state.mode}"]`);
+      if (radio) {
+        radio.checked = true;
+        radio.dispatchEvent(new Event('change'));
+      }
+    }
+  }
+
+  document.getElementById('members').addEventListener('input', saveFormState);
+  document.getElementById('group_size').addEventListener('input', saveFormState);
+  document.getElementById('num_groups').addEventListener('input', saveFormState);
+  document.querySelectorAll('input[name="mode"]').forEach(r => r.addEventListener('change', saveFormState));
+
+  restoreFormState();
+</script>
+
 <section>
   <div id="result"></div>
 </section>

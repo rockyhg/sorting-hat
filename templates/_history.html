@@ -5,11 +5,11 @@
     <summary>{{ record.date }}（{{ record.members | length }}人 → {{ record.groups | length }}部屋）</summary>
     <div class="group-grid">
       {% for group in record.groups %}
-      <div class="group-card">
-        <h4>ルーム {{ loop.index }}</h4>
+      <div class="group-card" style="--group-delay:{{ loop.index0 * 80 }}ms">
+        <h4>ルーム {{ loop.index }} <span class="count-badge">{{ group | length }}人</span></h4>
         <ul>
           {% for name in group %}
-          <li>{{ name }}</li>
+          <li data-initial="{{ name[:1] }}" style="--i:{{ loop.index0 }}">{{ name }}</li>
           {% endfor %}
         </ul>
       </div>

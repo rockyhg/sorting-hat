@@ -1,11 +1,11 @@
 <h2>組分け結果</h2>
 <div class="group-grid">
   {% for group in groups %}
-  <div class="group-card">
-    <h3>ルーム {{ loop.index }}</h3>
+  <div class="group-card" style="--group-delay:{{ loop.index0 * 120 }}ms">
+    <h3>ルーム {{ loop.index }} <span class="count-badge">{{ group | length }}人</span></h3>
     <ul>
       {% for name in group %}
-      <li>{{ name }}</li>
+      <li data-initial="{{ name[:1] }}" style="--i:{{ loop.index0 }}">{{ name }}</li>
       {% endfor %}
     </ul>
   </div>
